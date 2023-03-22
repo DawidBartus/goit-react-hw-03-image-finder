@@ -1,0 +1,8 @@
+.statistics {
+  display: flex;
+  justify-content: center;
+  background-color: #2463b5;
+  height: 50px;
+  align-items: center;
+  margin-bottom: 15px;
+}
