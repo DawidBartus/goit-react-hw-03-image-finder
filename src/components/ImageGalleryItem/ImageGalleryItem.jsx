@@ -2,12 +2,11 @@ import React from 'react';
 
 const ImageGalleryIteam = props => {
   const { images } = props;
-  console.log(images.length);
 
   return (
     <>
       {images.length > 0 &&
-        images.map(({ id, webformatURL, type, tags }) => {
+        images.map(({ id, largeImageURL, type, tags }) => {
           return (
             <li
               className="gallery-item"
@@ -20,7 +19,7 @@ const ImageGalleryIteam = props => {
                 style={{
                   width: '300px',
                 }}
-                src={webformatURL}
+                src={largeImageURL}
                 alt={tags + type}
               />
             </li>

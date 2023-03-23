@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Searchbar from 'components/Searchbar/Searchbar';
 import ImageGallery from 'components/ImageGallery/ImageGallery';
 import Button from 'components/Button/Button';
-
+import Modal from 'components/Modal/Modal';
 import axios from 'axios';
 import Notiflix from 'notiflix';
 
@@ -12,6 +12,7 @@ class MainClass extends Component {
   state = {
     images: [],
     isLoading: false,
+    isOpen: [],
     error: null,
     page: 1,
     total: '',
@@ -26,12 +27,20 @@ class MainClass extends Component {
     this.setState({ images: respons.hits });
   };
 
+  handleClick = e => {
+    this.setState({ isOpen: [] });
+    const newModal = [];
+    newModal.push(e.target.src);
+    this.setState({ isOpen: newModal });
+  };
+
   render() {
-    const { images } = this.state;
+    const { images, isOpen } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.handleSubmit} />
-        <ImageGallery images={images} />
+        <ImageGallery images={images} handleClick={this.handleClick} />
+        <Modal isOpen={isOpen} />
         {images.length > 0 && <Button />}
       </>
     );

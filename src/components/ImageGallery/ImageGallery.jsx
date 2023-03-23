@@ -1,11 +1,12 @@
 import ImageGalleryIteam from 'components/ImageGalleryItem/ImageGalleryItem';
 
 const ImageGallery = props => {
-  const { images } = props;
-  console.log('gere', images);
+  const { images, handleClick } = props;
+
   return (
     <ul
       className="gallery"
+      onClick={handleClick}
       style={{
         display: 'flex',
         justifyContent: 'center',
