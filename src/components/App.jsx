@@ -8,52 +8,83 @@ import Notiflix from 'notiflix';
 
 const KEY = '14551273-a2f87cd1c4bb2f6c327ac1a47';
 
-class MainClass extends Component {
+class App extends Component {
   state = {
     images: [],
     isLoading: false,
-    isOpen: [],
+    modalIsOpen: [],
+    modalAlt: '',
     error: null,
     page: 1,
     total: '',
+    text: '',
   };
 
-  handleSubmit = async e => {
+  // handleSubmit = async e => {
+  //   e.preventDefault();
+  //   const imageText = e.target.elements.searchInput.value;
+  //   const link = `https://pixabay.com/api/?q=${imageText}&page=${this.state.page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`;
+  //   const request = await fetch(link);
+  //   const respons = await request.json();
+  //   this.setState({ images: respons.hits });
+  // };
+
+  handleSubmit = e => {
     e.preventDefault();
+    this.setState({ images: [], page: 1 });
     const imageText = e.target.elements.searchInput.value;
-    const link = `https://pixabay.com/api/?q=${imageText}&page=${this.state.page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`;
+    this.setState({ text: imageText }, () => this.fetchdata());
+  };
+
+  fetchdata = async () => {
+    console.log(this.state.text);
+    const link = `https://pixabay.com/api/?q=${this.state.text}&page=${this.state.page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`;
     const request = await fetch(link);
     const respons = await request.json();
-    this.setState({ images: respons.hits });
+    this.setState({ images: [...this.state.images, ...respons.hits] });
   };
 
   handleClick = e => {
-    this.setState({ isOpen: [] });
+    this.setState({ modalIsOpen: [], modalAlt: '' });
     const newModal = [];
     newModal.push(e.target.src);
-    this.setState({ isOpen: newModal });
+    this.setState({ modalIsOpen: newModal, modalAlt: e.target.alt });
+  };
+
+  onEscClose = e => {
+    if (e.key === 'Escape') {
+      this.setState({ modalIsOpen: [], modalAlt: '' });
+    }
+  };
+  onClickClose = e => {
+    if (e.target.tagName === 'IMG') {
+      this.setState({ modalIsOpen: [], modalAlt: '' });
+    }
+  };
+
+  loadMode = () => {
+    this.setState({ page: this.state.page + 1 }, () => this.fetchdata());
+    console.log(this.state.page);
   };
 
   render() {
-    const { images, isOpen } = this.state;
+    const { images, modalIsOpen, modalAlt } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.handleSubmit} />
         <ImageGallery images={images} handleClick={this.handleClick} />
-        <Modal isOpen={isOpen} />
-        {images.length > 0 && <Button />}
+        {modalIsOpen.length > 0 && (
+          <Modal
+            modalIsOpen={modalIsOpen}
+            modalAlt={modalAlt}
+            onEscClose={this.onEscClose}
+            onClickClose={this.onClickClose}
+          />
+        )}
+        {images.length > 0 && <Button loadMoreBttn={this.loadMode} />}
       </>
     );
   }
 }
 
-const App = () => {
-  return <MainClass />;
-};
-
 export default App;
-
-// {this.state.images.length > 0 &&
-//   this.state.images.map(image => {
-//     return <p>{image.tags}</p>;
-//   })}
