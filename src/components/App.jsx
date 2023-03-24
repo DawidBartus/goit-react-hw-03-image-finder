@@ -46,13 +46,11 @@ class App extends Component {
     const link = `https://pixabay.com/api/?q=${this.state.text}&page=${this.state.page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12&height=250`;
     const request = await fetch(link);
     const respons = await request.json();
-    console.log(respons);
 
     if (respons.hits.length === 0) {
       Notiflix.Notify.failure('0 images found.');
       this.setState({ isLoading: false });
     } else {
-      Notiflix.Notify.success(`We found ${respons.total} images.`);
       this.setState({
         images: [...this.state.images, ...respons.hits],
         total: respons.total,
@@ -89,7 +87,7 @@ class App extends Component {
 
   render() {
     const { images, modalIsOpen, modalAlt, isLoading, total } = this.state;
-    console.log(total > images.length, total, images.length);
+
     return (
       <>
         <Searchbar onSubmit={this.handleSubmit} />
