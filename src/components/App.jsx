@@ -104,7 +104,7 @@ class App extends Component {
           />
         )}
 
-        {images.length > 0 && total >= images.length - 12 ? (
+        {images.length > 0 && total > images.length ? (
           <Button loadMoreBttn={this.loadMode} />
         ) : null}
       </>
