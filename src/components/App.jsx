@@ -4,7 +4,6 @@ import ImageGallery from 'components/ImageGallery/ImageGallery';
 import Button from 'components/Button/Button';
 import Modal from 'components/Modal/Modal';
 import Loader from 'components/Loader/Loader';
-import axios from 'axios';
 import Notiflix from 'notiflix';
 
 const KEY = '14551273-a2f87cd1c4bb2f6c327ac1a47';
@@ -44,21 +43,29 @@ class App extends Component {
   // };
 
   fetchdata = async () => {
-    const link = `https://pixabay.com/api/?q=${this.state.text}&page=${this.state.page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`;
+    const link = `https://pixabay.com/api/?q=${this.state.text}&page=${this.state.page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12&height=250`;
     const request = await fetch(link);
     const respons = await request.json();
-    this.setState({
-      images: [...this.state.images, ...respons.hits],
-      isLoading: false,
-    });
+    console.log(respons);
+
+    if (respons.hits.length === 0) {
+      Notiflix.Notify.failure('0 images found.');
+      this.setState({ isLoading: false });
+    } else {
+      Notiflix.Notify.success(`We found ${respons.total} images.`);
+      this.setState({
+        images: [...this.state.images, ...respons.hits],
+        total: respons.total,
+        isLoading: false,
+      });
+    }
   };
 
   handleClick = e => {
     if (e.target.tagName === 'IMG') {
       this.setState({ modalIsOpen: [], modalAlt: '' });
       const newModal = [];
-      console.log(e);
-      newModal.push(e.target.src);
+      newModal.push(e.target.getAttribute('dataid'));
       this.setState({ modalIsOpen: newModal, modalAlt: e.target.alt });
     }
   };
@@ -69,7 +76,7 @@ class App extends Component {
     }
   };
   onClickClose = e => {
-    if (e.target.tagName === 'IMG') {
+    if (e.target.tagName === 'IMG' || e.target.nodeName === 'DIV') {
       this.setState({ modalIsOpen: [], modalAlt: '' });
     }
   };
@@ -81,7 +88,8 @@ class App extends Component {
   };
 
   render() {
-    const { images, modalIsOpen, modalAlt, isLoading } = this.state;
+    const { images, modalIsOpen, modalAlt, isLoading, total } = this.state;
+    console.log(total > images.length, total, images.length);
     return (
       <>
         <Searchbar onSubmit={this.handleSubmit} />
@@ -98,7 +106,9 @@ class App extends Component {
           />
         )}
 
-        {images.length > 0 && <Button loadMoreBttn={this.loadMode} />}
+        {images.length > 0 && total >= images.length - 12 ? (
+          <Button loadMoreBttn={this.loadMode} />
+        ) : null}
       </>
     );
   }

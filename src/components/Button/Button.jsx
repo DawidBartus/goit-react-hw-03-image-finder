@@ -1,22 +1,11 @@
 import React from 'react';
+import style from 'components/Button/Button.module.css';
 
 const Button = props => {
   const { loadMoreBttn } = props;
   return (
-    <div
-      style={{
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        marginTop: '30px',
-      }}
-    >
-      <button
-        onClick={loadMoreBttn}
-        style={{
-          padding: '10px 30px',
-        }}
-      >
+    <div className={style.bttnHolder}>
+      <button onClick={loadMoreBttn} className={style.bttnLoader}>
         Load more
       </button>
     </div>

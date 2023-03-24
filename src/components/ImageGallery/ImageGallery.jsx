@@ -10,8 +10,8 @@ const ImageGallery = props => {
       style={{
         display: 'flex',
         justifyContent: 'center',
-        margin: '0 auto',
-        gap: '30px',
+        margin: '20px auto',
+        gap: '15px',
         flexWrap: 'wrap',
         maxWidth: '1000px',
       }}

@@ -10,8 +10,7 @@ class Modal extends Component {
   }
 
   render() {
-    const { modalIsOpen, modalAlt, onEscClose, onClickClose } = this.props;
-    console.log(modalIsOpen, modalAlt, onEscClose);
+    const { modalIsOpen, modalAlt, onClickClose } = this.props;
 
     return (
       <div className={style.modal} onClick={onClickClose}>
