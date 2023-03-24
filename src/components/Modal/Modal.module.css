@@ -10,3 +10,6 @@
   align-items: center;
   background-color: rgba(39, 37, 37, 0.8);
 }
+.images {
+  width: 100vh;
+}

@@ -15,8 +15,8 @@ class Modal extends Component {
 
     return (
       <div className={style.modal} onClick={onClickClose}>
-        <div className="modal">
-          <img src={modalIsOpen} alt={modalAlt} />
+        <div>
+          <img className={style.images} src={modalIsOpen} alt={modalAlt} />
         </div>
       </div>
     );

@@ -3,6 +3,7 @@ import Searchbar from 'components/Searchbar/Searchbar';
 import ImageGallery from 'components/ImageGallery/ImageGallery';
 import Button from 'components/Button/Button';
 import Modal from 'components/Modal/Modal';
+import Loader from 'components/Loader/Loader';
 import axios from 'axios';
 import Notiflix from 'notiflix';
 
@@ -31,24 +32,35 @@ class App extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    this.setState({ images: [], page: 1 });
+    this.setState({ images: [], page: 1, isLoading: true });
     const imageText = e.target.elements.searchInput.value;
-    this.setState({ text: imageText }, () => this.fetchdata());
+    this.setState({ text: imageText }, () => {
+      this.fetchdata();
+    });
   };
+  // toggleIsLoadeState = () => {
+  //   this.setState(isLoading => ({ isLoading: !isLoading }));
+  //   console.log('im updated', this.state.isLoading);
+  // };
 
   fetchdata = async () => {
-    console.log(this.state.text);
     const link = `https://pixabay.com/api/?q=${this.state.text}&page=${this.state.page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`;
     const request = await fetch(link);
     const respons = await request.json();
-    this.setState({ images: [...this.state.images, ...respons.hits] });
+    this.setState({
+      images: [...this.state.images, ...respons.hits],
+      isLoading: false,
+    });
   };
 
   handleClick = e => {
-    this.setState({ modalIsOpen: [], modalAlt: '' });
-    const newModal = [];
-    newModal.push(e.target.src);
-    this.setState({ modalIsOpen: newModal, modalAlt: e.target.alt });
+    if (e.target.tagName === 'IMG') {
+      this.setState({ modalIsOpen: [], modalAlt: '' });
+      const newModal = [];
+      console.log(e);
+      newModal.push(e.target.src);
+      this.setState({ modalIsOpen: newModal, modalAlt: e.target.alt });
+    }
   };
 
   onEscClose = e => {
@@ -63,16 +75,20 @@ class App extends Component {
   };
 
   loadMode = () => {
-    this.setState({ page: this.state.page + 1 }, () => this.fetchdata());
-    console.log(this.state.page);
+    this.setState({ page: this.state.page + 1, isLoading: true }, () =>
+      this.fetchdata()
+    );
   };
 
   render() {
-    const { images, modalIsOpen, modalAlt } = this.state;
+    const { images, modalIsOpen, modalAlt, isLoading } = this.state;
     return (
       <>
         <Searchbar onSubmit={this.handleSubmit} />
-        <ImageGallery images={images} handleClick={this.handleClick} />
+        {images.length > 0 && (
+          <ImageGallery images={images} handleClick={this.handleClick} />
+        )}
+        {isLoading && <Loader />}
         {modalIsOpen.length > 0 && (
           <Modal
             modalIsOpen={modalIsOpen}
@@ -81,6 +97,7 @@ class App extends Component {
             onClickClose={this.onClickClose}
           />
         )}
+
         {images.length > 0 && <Button loadMoreBttn={this.loadMode} />}
       </>
     );
