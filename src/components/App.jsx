@@ -5,6 +5,7 @@ import Button from 'components/Button/Button';
 import Modal from 'components/Modal/Modal';
 import Loader from 'components/Loader/Loader';
 import Notiflix from 'notiflix';
+import PropTypes from 'prop-types';
 
 const KEY = '14551273-a2f87cd1c4bb2f6c327ac1a47';
 
@@ -111,5 +112,13 @@ class App extends Component {
     );
   }
 }
+
+App.propTypes = {
+  images: PropTypes.object,
+  modalIsOpen: PropTypes.object,
+  modalAlt: PropTypes.string,
+  isLoading: PropTypes.bool,
+  total: PropTypes.string,
+};
 
 export default App;

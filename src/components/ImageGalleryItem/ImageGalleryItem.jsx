@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const ImageGalleryIteam = props => {
   const { images } = props;
@@ -30,5 +31,16 @@ const ImageGalleryIteam = props => {
         })}
     </>
   );
+};
+ImageGalleryIteam.propTypes = {
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      largeImageURL: PropTypes.string,
+      previewURL: PropTypes.string,
+      type: PropTypes.string,
+      tags: PropTypes.string,
+    })
+  ),
 };
 export default ImageGalleryIteam;

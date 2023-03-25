@@ -1,4 +1,5 @@
 import ImageGalleryIteam from 'components/ImageGalleryItem/ImageGalleryItem';
+import PropTypes from 'prop-types';
 
 const ImageGallery = props => {
   const { images, handleClick } = props;
@@ -20,5 +21,8 @@ const ImageGallery = props => {
     </ul>
   );
 };
-
+ImageGallery.propTypes = {
+  images: PropTypes.array,
+  handleClick: PropTypes.func,
+};
 export default ImageGallery;
